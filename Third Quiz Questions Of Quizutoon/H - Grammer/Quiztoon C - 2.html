@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizutoon | Seedfaa</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .quiz-container {
+            width: 400px;
+            max-width: 600px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            height: 100vh;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-top: 30px;
+        }
+        .progress-bar-container {
+            flex: 1;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            margin: 0 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        #quiz {
+            position: absolute;
+            top: 350px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            text-align: center;
+
+        }
+
+        .options button {
+            display: block flex;
+            width: 95%;
+            margin: 10px 0;
+            padding: 10px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+            justify-self: center;
+        }
+        .options button:hover {
+            background: #45a049;
+        }
+        .feedback {
+            font-size: 1.3rem;
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+        .result {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            display: none;
+        }
+        .final-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .character {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        .xp {
+            color: #ff9800;
+        }
+        .consecutive-message {
+            font-size: 1.2rem;
+            color: #ff9800;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 1000;
+            animation: fadeInOut 3s ease-in-out;
+            flex-direction: column;
+        }
+        .overlay button{
+            width: 200px;
+            height: 40px;
+            color: white;
+            background-color: #229200;
+            border: 0;
+            border-radius: 20px;
+        }
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .points-earned {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #3cff00;
+            animation: forwards 0.3s plusone;
+            position: absolute;
+            right: 20px;
+        }
+        @keyframes plusone{
+            0%{
+                top: 100px;
+            }
+            90%{
+                opacity: 100%;
+            }
+            100%{
+                top: 50px;
+                opacity: 0;
+            }
+        }
+        #loading-screen{
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            left: 0;
+            background-color: #ffffff;
+            z-index: 10000000000;
+            text-align: center;
+            color: #4b4b4b;
+        }
+        @keyframes fad-out-loading{
+            99%{
+                opacity: 0;
+            }
+            100%{
+                display: none;
+            }
+        }
+        /* Swiper Container */
+.swiper-container {
+    width: 90%;
+    max-width: 800px;
+    height: 200px;
+    margin: 30px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Slides */
+.swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: 140px;
+    background-position: center;
+    cursor: pointer;
+    background-repeat: no-repeat;
+}
+#time-spent, .xp, .summary{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 3px solid rgb(255, 166, 0);
+    border-radius: 20px;
+    width: 100px;
+    margin-left: 10px;
+}
+        .progress span{
+            margin-left: 40px;
+            z-index: 1000000000;
+            font-size: 10px;
+        }
+        .progress span:nth-last-child(){
+            display: flex;
+            margin-left: auto;
+            float: right;
+        }
+        #alt-message{
+            bottom: 10px;
+            position: absolute;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!--Loading screen-->
+    <div id="loading-screen">
+        <div>
+            <img src="Untitled design (4).gif" width="300px" alt=""><br>
+            Loading...
+        </div>
+    </div>
+<br><br>
+    <div class="quiz-container">
+        <div class="header">
+            <div class="progress-bar-container">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="score" id="score">⭐ 0</div>
+        </div>
+        <div class="points-earned" id="points-earned"></div>
+<br><br>
+        <div class="image">
+                <!-- Swiper Container -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide" style="background-image: url('Untitled design (17).png');"></div>
+            <!-- Slide 2 -->
+            <div class="swiper-slide" style="background-image: url('Untitled design (18).png')"></div>
+            <!-- Slide 3 -->
+            <div class="swiper-slide" style="background-image: url('Untitled design (19).png')"></div>
+        </div>
+    </div>
+        </div>
+        <div id="quiz">
+            <div class="question" id="question">Loading question...</div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <div class="consecutive-message" id="consecutive-message"></div>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="final-screen" id="final-screen">
+            <img src="Untitled design (20).png" alt="Character" class="character">
+            <div style="display: flex;">
+            <div class="xp"><h3><span id="xp-count">0</span></h3><p>XP</p></div>
+            <div class="summary" id="summary"></div>
+            <div id="time-spent">Time Spent: 0s</div>
+            </div>
+        </div>
+        <p id="alt-message" style="color: red;">Message: Please not select wrong answer many time your sroce be in '-'</p>
+    </div>
+
+    <!-- Full Page Overlay -->
+    <div class="overlay" id="overlay">
+    </div>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: {
+                delay: 10000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+    <!--Loading seane setup-->
+    <script>
+        const loadingScreen = document.getElementById('loading-screen');
+        function LoadingWindow() {
+            loadingScreen.style.animation = 'fad-out-loading 0.5s forwards'
+        }
+
+        // Set the time to switch window in milliseconds (5000ms = 5 seconds)
+        setTimeout(LoadingWindow, 3000);
+    </script>
+    <script>
+        const questions = [
+            { question: "What is the capital of India?", options: ["Delhi", "Mumbai", "Kolkata", "Chennai"], correct: "Delhi" },
+            { question: "What is 5 + 3?", options: ["7", "8", "9", "10"], correct: "8" },
+            { question: "What is the color of the sky?", options: ["Blue", "Green", "Red", "Yellow"], correct: "Blue" },
+            { question: "What is 10 / 2?", options: ["4", "5", "6", "7"], correct: "5" },
+            { question: "What is the largest planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], correct: "Jupiter" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let consecutiveCorrect = 0;
+        let startTime = Date.now();
+
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options");
+        const progressEl = document.getElementById("progress");
+        const scoreEl = document.getElementById("score");
+        const feedbackEl = document.getElementById("feedback");
+        const resultEl = document.getElementById("result");
+        const finalScreenEl = document.getElementById("final-screen");
+        const xpCountEl = document.getElementById("xp-count");
+        const summaryEl = document.getElementById("summary");
+        const consecutiveMessageEl = document.getElementById("consecutive-message");
+        const overlayEl = document.getElementById("overlay");
+        const timeSpentEl = document.getElementById("time-spent");
+        const pointsEarnedEl = document.getElementById("points-earned");
+
+        function loadQuestion() {
+            const current = questions[currentQuestion];
+            questionEl.textContent = current.question;
+            optionsEl.innerHTML = "";
+
+            current.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option, button);
+                optionsEl.appendChild(button);
+            });
+
+            updateProgress();
+        }
+
+        function checkAnswer(selected, button) {
+            const current = questions[currentQuestion];
+            let pointsEarned = 0;
+
+            if (selected === current.correct) {
+                // Increase points based on consecutive correct answers
+                if (consecutiveCorrect === 0) {
+                    pointsEarned = 1;  // First correct answer in streak
+                } else {
+                    pointsEarned = 1; // Subsequent correct answers
+                }
+
+                score += pointsEarned;
+                consecutiveCorrect++;
+
+                feedbackEl.textContent = `Correct! +${pointsEarned}`;
+                feedbackEl.style.display = "block";
+                pointsEarnedEl.textContent = `+${pointsEarned}`;
+                pointsEarnedEl.style.display = "block";  // Show points earned
+                updateScore();
+                showConsecutiveMessage();
+
+                // Trigger the "Very Good!" event after 5 correct answers in a row
+                if (consecutiveCorrect === 5) {
+                    displayOverlay(`Good`);
+
+                    
+                    consecutiveCorrect = 0; // Reset the consecutive count after the event
+                }
+            } else {
+                // If the answer is wrong, deduct 0.5 points
+                score -= 0.5;
+                feedbackEl.textContent = "Try again!";
+                feedbackEl.style.display = "block";
+                pointsEarnedEl.textContent = "-0.5";
+                pointsEarnedEl.style.display = "block";  // Show points lost
+                consecutiveCorrect = 0;  // Reset consecutive correct answers
+                updateScore();
+            }
+
+            setTimeout(() => {
+                feedbackEl.style.display = "none";
+                pointsEarnedEl.style.display = "none";
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showFinalScreen();
+                }
+            }, 1000);
+        }
+
+        function updateProgress() {
+            progressEl.style.width = ((currentQuestion + 1) / questions.length) * 100 + "%";
+        }
+
+        function updateScore() {
+            scoreEl.textContent = `⭐${score.toFixed(1)}`;
+        }
+
+        function showConsecutiveMessage() {
+            if (consecutiveCorrect === 5) {
+                consecutiveMessageEl.textContent = "Very Good!";
+            } else if (consecutiveCorrect === 4) {
+                consecutiveMessageEl.textContent = "Good!";
+            } else if (consecutiveCorrect === 3) {
+                consecutiveMessageEl.textContent = "Okay!";
+            } else {
+                consecutiveMessageEl.textContent = "";
+            }
+        }
+
+        function showFinalScreen() {
+            const xpEarned = score * 10;
+            const summary = `<h3>${score.toFixed(1)}/${questions.length}</h3><p>Score</p>`;
+
+            const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+            const altMeg = document.getElementById('alt-message');
+
+            altMeg.style.display = 'none';
+            questionEl.style.display = "none";
+            optionsEl.style.display = "none";
+            progressEl.style.width = "100%";
+            finalScreenEl.style.display = "flex";
+
+            let currentXP = 0;
+            const interval = setInterval(() => {
+                if (currentXP < xpEarned) {
+                    currentXP++;
+                    xpCountEl.textContent = currentXP;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 50);
+
+            summaryEl.innerHTML = summary;
+            timeSpentEl.innerHTML = `<h3>${timeSpent}s</h3><p>Time Spand</p>`;
+        }
+
+        function displayOverlay(message) {
+            overlayEl.textContent = message;
+            overlayEl.style.display = "flex";
+            overlayEl.innerHTML = `<img src="Great Job (1).gif" width="300px"><br><br><br><button type="button">Close</button>`
+
+            // Hide the overlay when clicked
+            overlayEl.onclick = () => {
+                overlayEl.style.display = "none";
+            };
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
