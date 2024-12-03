@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class and Subject Selection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4bf63b, #55f78b);
+            color: #ffffff;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 320px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #333333;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+            color: #3b82f6;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #333;
+            background-color: #f9fafb;
+            outline: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: #3b82f6;
+            background-color: #f0f4f8;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .container select:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .submit-button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="container">
+            <h2>Select Options</h2>
+
+            <label for="term">
+                <span class="icon">💱</span>
+                Select Term:
+            </label>
+            <select name="term" id="term">
+                <option value="First Quiz Questions Of Quizutoon">First Quiz Questions Of Quizutoon</option>
+                <option value="Second Quiz Questio Of Quizutoon">Second Quiz Questio Of Quizutoon</option>
+                <option value="Third Quiz Questions Of Quizutoon">Third Quiz Questions Of Quizutoon</option>
+            </select>
+
+            <label for="class">
+                <span class="icon">📘</span>
+                Select Class:
+            </label>
+            <select name="class" id="class">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+
+            <label for="subject">
+                <span class="icon">📚</span>
+                Subject:
+            </label>
+            <select name="subject" id="subject">
+                <option value="Science">Science</option>
+                <option value="Sst">Social Studies</option>
+                <option value="Math">Math</option>
+                <option value="G.K">General Knowledge</option>
+            </select>
+
+            <button class="submit-button" type="submit" id="submitBtn">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        const classes = document.getElementById('class');
+        const subject = document.getElementById('subject');
+        const term = document.getElementById('term');
+        const submitBtn = document.getElementById('submitBtn');
+
+        submitBtn.addEventListener('click', () =>{
+            window.location.href = `${term.value}/${subject.value}/Quiztoon C - ${classes.value}.html`
+        })
+    </script>
+</body>
+</html>
